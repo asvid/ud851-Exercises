@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -20,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private GuestListAdapter mAdapter;
     private SQLiteDatabase mDb;
+
+    private EditText mNewGuestNameEditText;
+    private EditText mNewPartySizeEditText;
 
     // TODO (1) Create local EditText members for mNewGuestNameEditText and mNewPartySizeEditText
 
@@ -60,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         // Link the adapter to the RecyclerView
         waitlistRecyclerView.setAdapter(mAdapter);
 
+
+        mNewGuestNameEditText = (EditText) findViewById(R.id.person_name_edit_text);
+        mNewPartySizeEditText = (EditText) findViewById(R.id.party_count_edit_text);
+
     }
 
     /**
@@ -71,7 +77,20 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO (9) First thing, check if any of the EditTexts are empty, return if so
 
+        if (mNewGuestNameEditText.getText().length() == 0 || mNewPartySizeEditText.getText().length() == 0) {
+            return;
+        }
+
         // TODO (10) Create an integer to store the party size and initialize to 1
+
+        int partySize = 1;
+        try {
+            partySize = Integer.parseInt(mNewPartySizeEditText.getText().toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        addNewGuest(mNewGuestNameEditText.getText().toString(), partySize);
 
         // TODO (11) Use Integer.parseInt to parse mNewPartySizeEditText.getText to an integer
 
@@ -84,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO (20) To make the UI look nice, call .getText().clear() on both EditTexts, also call clearFocus() on mNewPartySizeEditText
 
     }
-
 
 
     /**
@@ -113,6 +131,17 @@ public class MainActivity extends AppCompatActivity {
     // TODO (7) call put to insert the party size value with the key COLUMN_PARTY_SIZE
 
     // TODO (8) call insert to run an insert query on TABLE_NAME with the ContentValues created
+
+
+    private long addNewGuest(String name, int partySize) {
+        ContentValues cv = new ContentValues();
+
+        cv.put(WaitlistContract.WaitlistEntry.COLUMN_GUEST_NAME, name);
+        cv.put(WaitlistContract.WaitlistEntry.COLUMN_PARTY_SIZE, partySize);
+
+        return mDb.insert(WaitlistContract.WaitlistEntry.TABLE_NAME, null, cv);
+    }
+
 
 
 

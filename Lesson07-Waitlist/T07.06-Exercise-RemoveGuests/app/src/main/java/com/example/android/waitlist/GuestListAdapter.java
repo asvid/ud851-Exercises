@@ -19,8 +19,9 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
 
     /**
      * Constructor using the context and the db cursor
+     *
      * @param context the calling context/activity
-     * @param cursor the db cursor with waitlist data to display
+     * @param cursor  the db cursor with waitlist data to display
      */
     public GuestListAdapter(Context context, Cursor cursor) {
         this.mContext = context;
@@ -44,12 +45,14 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         // Update the view holder with the information needed to display
         String name = mCursor.getString(mCursor.getColumnIndex(WaitlistContract.WaitlistEntry.COLUMN_GUEST_NAME));
         int partySize = mCursor.getInt(mCursor.getColumnIndex(WaitlistContract.WaitlistEntry.COLUMN_PARTY_SIZE));
+        long id = mCursor.getLong(mCursor.getColumnIndex(WaitlistContract.WaitlistEntry._ID));
         // TODO (6) Retrieve the id from the cursor and
 
         // Display the guest name
         holder.nameTextView.setText(name);
         // Display the party count
         holder.partySizeTextView.setText(String.valueOf(partySize));
+        holder.itemView.setTag(id);
         // TODO (7) Set the tag of the itemview in the holder to the id
     }
 
